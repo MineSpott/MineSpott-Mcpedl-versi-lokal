@@ -1,0 +1,4 @@
+import './app.js';import {api} from './api.js';
+const form=document.getElementById('upload-form'),msg=document.getElementById('upload-message');
+try{const {user}=await api('/api/auth/me');if(!user)location.href='/login.html';else if(!['creator','admin','owner'].includes(user.role))location.href='/';}catch{location.href='/login.html';}
+form.addEventListener('submit',async e=>{e.preventDefault();msg.textContent='Uploading files securely...';const data=new FormData(form);const thumb=data.get('thumbnail'),pack=data.get('package');if(thumb?.size>5*1024*1024){msg.textContent='Thumbnail maksimal 5 MB.';return;}if(pack?.size>100*1024*1024){msg.textContent='File karya maksimal 100 MB.';return;}try{const r=await api('/api/content',{method:'POST',body:data});msg.textContent=r.message;form.reset();}catch(err){msg.textContent=err.message;}});

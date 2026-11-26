@@ -1,0 +1,4 @@
+import './app.js';import {api} from './api.js';
+const login=document.getElementById('login-form'),register=document.getElementById('register-form'),message=document.getElementById('auth-message');
+login?.addEventListener('submit',async e=>{e.preventDefault();message.textContent='Signing in...';try{const r=await api('/api/auth/login',{method:'POST',body:Object.fromEntries(new FormData(login))});location.href=r.user.role==='owner'?'/owner.html':'/dashboard.html';}catch(err){message.textContent=err.message;}});
+register?.addEventListener('submit',async e=>{e.preventDefault();message.textContent='Submitting...';try{const r=await api('/api/auth/register',{method:'POST',body:Object.fromEntries(new FormData(register))});message.textContent=r.message;register.reset();}catch(err){message.textContent=err.message;}});
